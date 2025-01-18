@@ -3,6 +3,9 @@
         'tableTitle' => 'Clientes',
         'headers' => $headers,
         'model' => $model,
-        'searchObj' => ['label' => 'Apellido', 'value' =>'surname']
+        'errors' => $errors,
+        'searchObj' => ['label' => 'Apellido', 'value' =>'surname'],
     ])
+    
 </div>
+

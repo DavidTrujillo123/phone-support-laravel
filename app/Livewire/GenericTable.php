@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use Illuminate\Database\Eloquent\Model;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -22,10 +23,13 @@ class GenericTable extends Component
     public $showForm = false;
     public $showFormCreate = false;
     
-    public function mount($tableTitle, $headers, $model, $searchObj){
+    public $errors;
+
+    public function mount($tableTitle, $headers, $model, $errors, $searchObj){
         $this->tableTitle = $tableTitle;
         $this->headers = $headers;
         $this->model = new $model;
+        $this->errors = $errors;
         $this->searchParam = $searchObj['value'];
         $this->labelSearch = $searchObj['label'];
     }
@@ -47,16 +51,22 @@ class GenericTable extends Component
         }
     }
 
-    public function togglePanelUpdate($id){
-        $this->objId = $id;
+    public function togglePanelUpdate($id=null){
         $this->showForm =!$this->showForm;
-
-        //Emit event when change id
-        //Used to pass ids in forms
-        $this->dispatch('passId', ['id' => $id]);
+        if($id != null){
+            $this->objId = $id;
+            //Emit event when change id
+            //Used to pass ids in forms
+            $this->dispatch('passId', ['id' => $id]);
+        }
 
     }
     
+    //Called in method update in GeneralForm
+    #[On('reloadData')]
+    public function reloadData(){
+        $this->resetPage();
+    }
 
     public function render()
     {
